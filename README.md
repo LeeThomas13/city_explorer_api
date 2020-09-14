@@ -10,7 +10,7 @@ Another component of this portion of the course involves working with a static c
 
 # Project Name
 
-**Author**: Your Name Goes Here
+**Author**: Lee Thomas
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
@@ -37,15 +37,15 @@ Estimate of time needed to complete: 10 minutes
 
 Start time: 2:25
 
-Finish time: 
+Finish time: 2:46
 
-Actual time needed to complete: 
+Actual time needed to complete: 21 minutes
 
 Number and name of feature: #2 Locations
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 2:47
 
 Finish time: 
 
