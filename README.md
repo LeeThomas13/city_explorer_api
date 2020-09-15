@@ -34,6 +34,7 @@ This server uses dotenv, express, and cors as its dependencies. We are using sup
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 Version 1.0.0 - base
 Version 2.0.0 - start of lab 07, feature 1
+Version 2.0.1 - cleaned up server.js now ready for refactor
 
 # Lab 06
 
