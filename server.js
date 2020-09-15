@@ -1,26 +1,33 @@
 'use strict';
 
-const express = require('express');
-
+//Load Environment Variables from the .env file
 require('dotenv').config();
 
-const app = express();
-
-const PORT = process.env.PORT || 3000;
-
+//Application Dependencies
+const express = require('express');
 const cors = require('cors');
-const { response } = require('express');
+const superagent = require('superagent');
 
-let weatherArray = [];
-
-
+//Application Setup
+const PORT = process.env.PORT || 3000;
+const app = express();
 app.use(cors());
 
-app.get('/', (request, response) => {
-    response.send('Hello World');
-});
+//Global Variables
+let weatherArray = [];
 
-app.get('/location', (request, response) => {
+//Route Definitions
+app.get('/', blankHandler);
+app.get('/location', locationHandler);
+app.get('/weather', weatherHandler);
+app.use('*', brokenHandler);
+
+//Functions
+function blankHandler (request, response) {
+    response.send('Hello World');
+}
+
+function locationHandler (request, response) {
     try {
         const locationData = require('./data/location.json');
         const city = request.query.city;
@@ -29,9 +36,9 @@ app.get('/location', (request, response) => {
     } catch (error){
         return response.status(500).send(`something went wrong :\(`)
     }
-})
+}
 
-app.get('/weather', (request, response) => {
+function weatherHandler (request, response) {
     try {
         const weatherData = require('./data/weather.json');
         weatherData.data.forEach(value => {
@@ -42,7 +49,7 @@ app.get('/weather', (request, response) => {
     } catch (error) {
         return response.status(500).send(`something went wrong :\(`)
     }
-})
+}
 
 function CityWeather (weatherObject) {
     this.time = weatherObject.datetime;
@@ -56,6 +63,11 @@ function ConstructCity (city, locationObject) {
     this.longitude = locationObject[0].lon;
 }
 
+function brokenHandler (request, response) {
+    response.status(500).send('this is broke AF')
+}
+
+//Force server to listen for requests
 app.listen(PORT, () => {
     console.log(`listening on ${PORT}`);
 });
