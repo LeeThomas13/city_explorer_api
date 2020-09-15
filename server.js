@@ -9,6 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const cors = require('cors');
+const { response } = require('express');
 
 let weatherArray = [];
 
@@ -21,12 +22,12 @@ app.get('/', (request, response) => {
 
 app.get('/location', (request, response) => {
     try {
-    const locationData = require('./data/location.json');
-    const city = request.query.city;
-    let newCity = new ConstructCity(city, locationData);
-    response.send(newCity);
+        const locationData = require('./data/location.json');
+        const city = request.query.city;
+        let newCity = new ConstructCity(city, locationData);
+        response.send(newCity);
     } catch (error){
-        console.error(error);
+        return response.status(500).send(`something went wrong :\(`)
     }
 })
 
@@ -39,7 +40,7 @@ app.get('/weather', (request, response) => {
         })
         response.send(weatherArray)
     } catch (error) {
-        console.error(error);
+        return response.status(500).send(`something went wrong :\(`)
     }
 })
 
