@@ -11,16 +11,19 @@ Another component of this portion of the course involves working with a static c
 # Project Name
 
 **Author**: Lee Thomas
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 2.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+This application is being made to house all types of information for any given place. This includes but is not limited to weather conditions of the area, trails to hike, restaurants nearby atc.
 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+You need a back end server to launch this site first and foremost. You will also need your very own unique API keys to access the data we are displaying. We need to require our dependencies in our server js, and listen to the server as well. Lastly you will need route handler functions that take in a request and return a response to each unique route. 
 
 ## Architecture
 <!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+This server uses dotenv, express, and cors as its dependencies. We are using superagent to make the API processing easier. We will take in a unique route, such as /location and that will run a callback function that takes in a request, and returns its unique response. We are using PORT 3000 because we are building out a backend, and its common practice to use 3000 for backend.
 
 ## Change Log
 <!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
@@ -29,9 +32,12 @@ Another component of this portion of the course involves working with a static c
 
 ## Credits and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
--->
+Version 1.0.0 - base
+Version 2.0.0 - start of lab 07, feature 1
 
-Number and name of feature: #1 Repository Set Up
+# Lab 06
+
+### Number and name of feature: #1 Repository Set Up
 
 Estimate of time needed to complete: 10 minutes
 
@@ -41,7 +47,7 @@ Finish time: 2:46
 
 Actual time needed to complete: 21 minutes
 
-Number and name of feature: #2 Locations
+### Number and name of feature: #2 Locations
 
 Estimate of time needed to complete: 1 hour
 
@@ -51,7 +57,7 @@ Finish time: 4:40
 
 Actual time needed to complete: 1 hour and 53 minutes
 
-Number and name of feature: #3 Weather
+### Number and name of feature: #3 Weather
 
 Estimate of time needed to complete: 1 hour
 
@@ -61,7 +67,7 @@ Finish time: 5:54
 
 Actual time needed to complete: 59 minutes
 
-Number and name of feature: #4 Errors
+### Number and name of feature: #4 Errors
 
 Estimate of time needed to complete: 1 hour
 
@@ -70,3 +76,47 @@ Start time: 6:00
 Finish time: 6:30
 
 Actual time needed to complete: 30 minutes
+
+# Lab 07
+
+### Number and name of feature: #5 Data Formatting
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 1:40
+
+Finish time: 
+
+Actual time needed to complete: 
+
+### Number and name of feature: #6 Locations
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time: 
+
+Actual time needed to complete: 
+
+### Number and name of feature: #7 Weather
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time: 
+
+Actual time needed to complete: 
+
+### Number and name of feature: #8 Trails
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time: 
+
+Actual time needed to complete: 
+-->
+
