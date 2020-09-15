@@ -10,6 +10,9 @@ const PORT = process.env.PORT || 3000;
 
 const cors = require('cors');
 
+let weatherArray = [];
+
+
 app.use(cors());
 
 app.get('/', (request, response) => {
@@ -18,19 +21,32 @@ app.get('/', (request, response) => {
 
 app.get('/location', (request, response) => {
     try {
-    const locationData = require('./data/location.json')
-    console.log('hello', request.query.city);
+    const locationData = require('./data/location.json');
     const city = request.query.city;
     let newCity = new ConstructCity(city, locationData);
     response.send(newCity);
-    } catch(error){
+    } catch (error){
         console.error(error);
     }
 })
 
 app.get('/weather', (request, response) => {
-    
+    try {
+        const weatherData = require('./data/weather.json');
+        weatherData.data.forEach(value => {
+            let newWeather = new CityWeather(value);
+            weatherArray.push(newWeather);
+        })
+        response.send(weatherArray)
+    } catch (error) {
+        console.error(error);
+    }
 })
+
+function CityWeather (weatherObject) {
+    this.time = weatherObject.datetime;
+    this.forecast = weatherObject.weather.description;
+}
 
 function ConstructCity (city, locationObject) {
     this.search_query = city;
