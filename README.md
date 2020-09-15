@@ -35,6 +35,7 @@ This server uses dotenv, express, and cors as its dependencies. We are using sup
 Version 1.0.0 - base
 Version 2.0.0 - start of lab 07, feature 1
 Version 2.0.1 - cleaned up server.js now ready for refactor
+Version 2.1.1 - finished refactoring old code, and get a map of whichever unique city was requested rendering.
 
 # Lab 06
 
@@ -86,25 +87,25 @@ Estimate of time needed to complete: 1 hour
 
 Start time: 1:40
 
-Finish time: 
+Finish time: 4:40
 
-Actual time needed to complete: 
+Actual time needed to complete: 3 Hours
 
 ### Number and name of feature: #6 Locations
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 1:40
 
-Finish time: 
+Finish time: 4:40
 
-Actual time needed to complete: 
+Actual time needed to complete: 3 Hours
 
 ### Number and name of feature: #7 Weather
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 4:40
 
 Finish time: 
 

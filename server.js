@@ -13,54 +13,59 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(cors());
 
-//Global Variables
-let weatherArray = [];
-
 //Route Definitions
 app.get('/', blankHandler);
 app.get('/location', locationHandler);
-app.get('/weather', weatherHandler);
+// app.get('/weather', weatherHandler);
+// app.get('/trails', trailHandler);
 app.use('*', brokenHandler);
 
 //Functions
-function blankHandler (request, response) {
-    response.send('Hello World');
-}
 
 function locationHandler (request, response) {
-    try {
-        const locationData = require('./data/location.json');
-        const city = request.query.city;
-        let newCity = new ConstructCity(city, locationData);
-        response.send(newCity);
-    } catch (error){
-        return response.status(500).send(`something went wrong :\(`)
-    }
-}
+    let city = request.query.city;
+    let key = process.env.GEOCODE_API_KEY;
+    const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json&limit=1`
 
-function weatherHandler (request, response) {
-    try {
-        const weatherData = require('./data/weather.json');
-        weatherData.data.forEach(value => {
-            let newWeather = new CityWeather(value);
-            weatherArray.push(newWeather);
+    superagent
+        .get(url)
+
+        .then((data) => {
+            const geoData = data.body[0];
+            const location = new ConstructCity(city, geoData);
+            response.send(location);
         })
-        response.send(weatherArray)
-    } catch (error) {
-        return response.status(500).send(`something went wrong :\(`)
-    }
+        .catch((error) => {
+            console.log('ERROR', error);
+            response.status.send('this is broke AF');
+        })
 }
 
-function CityWeather (weatherObject) {
-    this.time = weatherObject.datetime;
-    this.forecast = weatherObject.weather.description;
-}
+// function weatherHandler (request, response) {
+    
+// }
 
-function ConstructCity (city, locationObject) {
+// function trailHandler (request, response) {
+
+// }
+
+function ConstructCity (city, geoData) {
     this.search_query = city;
-    this.formatted_query = locationObject[0].display_name;
-    this.latitude = locationObject[0].lat;
-    this.longitude = locationObject[0].lon;
+    this.formatted_query = geoData.display_name;
+    this.latitude = geoData.lat;
+    this.longitude = geoData.lon;
+}
+
+// function ConstructWeather (city, weatherObject) {
+    
+// }
+
+// function ConstructTrails (city, trailObject) {
+
+// }
+
+function blankHandler (request, response) {
+    response.send('Hello World');
 }
 
 function brokenHandler (request, response) {
