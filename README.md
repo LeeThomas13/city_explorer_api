@@ -35,7 +35,8 @@ This server uses dotenv, express, and cors as its dependencies. We are using sup
 Version 1.0.0 - base
 Version 2.0.0 - start of lab 07, feature 1
 Version 2.0.1 - cleaned up server.js now ready for refactor
-Version 2.1.1 - finished refactoring old code, and get a map of whichever unique city was requested rendering.
+Version 2.1.0 - finished refactoring old code, and get a map of whichever unique city was requested rendering.
+Version 2.2.0 - finished rendering weather forecast for selected city.
 
 # Lab 06
 
@@ -107,9 +108,9 @@ Estimate of time needed to complete: 1 hour
 
 Start time: 4:40
 
-Finish time: 
+Finish time: 6:40
 
-Actual time needed to complete: 
+Actual time needed to complete: 2 Hours
 
 ### Number and name of feature: #8 Trails
 
