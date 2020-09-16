@@ -37,6 +37,7 @@ Version 2.0.0 - start of lab 07, feature 1
 Version 2.0.1 - cleaned up server.js now ready for refactor
 Version 2.1.0 - finished refactoring old code, and get a map of whichever unique city was requested rendering.
 Version 2.2.0 - finished rendering weather forecast for selected city.
+Version 2.3.0 - finished rendering nearby trails.
 
 # Lab 06
 
@@ -116,10 +117,10 @@ Actual time needed to complete: 2 Hours
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 6:40
 
-Finish time: 
+Finish time: 7:10
 
-Actual time needed to complete: 
+Actual time needed to complete: 30 minutes
 -->
 

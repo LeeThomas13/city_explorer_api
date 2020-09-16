@@ -26,9 +26,7 @@ function locationHandler (request, response) {
     let key = process.env.GEOCODE_API_KEY;
     const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json&limit=1`
 
-    superagent
-        .get(url)
-
+    superagent.get(url)
         .then((data) => {
             const geoData = data.body[0];
             const location = new ConstructCity(city, geoData);
@@ -78,11 +76,36 @@ function ConstructWeather (weatherObject) {
 
 //Trail Functions
 function trailHandler (request, response) {
+    let lat = request.query.latitude;
+    let lon = request.query.longitude;
+    // console.log(request.query);
+    let key = process.env.TRAIL_API_KEY;
+    const url = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=10&key=${key}`;
 
+    superagent.get(url)
+        .then((val => {
+            // console.log(val.body);
+            const trailInformation = val.body.trails.map(obj => {
+                return new ConstructTrails(obj);
+            })
+            response.send(trailInformation);
+        }))
+        .catch((error) => {
+            console.log('ERROR', error)
+            response.status(500).send('now THIS is broke AFFF');
+        })
 }
 
-function ConstructTrails (city, trailObject) {
-
+function ConstructTrails (trailObject) {
+    this.name = trailObject.name;
+    this.location = trailObject.location;
+    this.length = trailObject.length;
+    this.star_votes = trailObject.star_votes;
+    this.summary = trailObject.summary;
+    this.trail_url = trailObject.trail_url;
+    this.conditions = trailObject.conditions;
+    this.condition_date = trailObject.condition_date;
+    this.condition_time = trailObject.condition_time
 }
 
 //Error Functions
