@@ -10,7 +10,7 @@ const superagent = require('superagent');
 const pg = require('pg')
 
 //Application Setup
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const app = express();
 const client = new pg.Client(process.env.DATABASE_URL);
 app.use(cors());
@@ -25,19 +25,47 @@ app.use('*', brokenHandler);
 // Location Functions
 function locationHandler (request, response) {
     let city = request.query.city;
-    let key = process.env.GEOCODE_API_KEY;
-    const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json&limit=1`
+    const sql = `SELECT * FROM cities WHERE search_query=$1;`;
+    const safeValues = [city];
 
-    superagent.get(url)
-        .then((data) => {
-            const geoData = data.body[0];
-            const location = new ConstructCity(city, geoData);
-            response.send(location);
-        })
-        .catch((error) => {
-            console.log('ERROR', error);
-            response.status.send('this is broke AF');
-        })
+    client.query(sql, safeValues)
+    .then (resultsFromSql => {
+        if (resultsFromSql.rowCount) {
+            const chosenCity = resultsFromSql.rows[0];
+            console.log('found city in the database');
+            response.status(200).send(chosenCity);
+        } else {
+            console.log('did not find city in database, going to the API');
+
+            const url = `https://us1.locationiq.com/v1/search.php`;
+            const queryObject = {
+                key: process.env.GEOCODE_API_KEY,
+                city,
+                format: 'JSON',
+                limit: 1
+            }
+            superagent.get(url)
+            .query(queryObject)
+                .then(data => {
+                    console.log(data.body);
+                    const location = new ConstructCity(city, data.body[0]);
+                    const sql = 'INSERT INTO cities (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)'
+                    const safeValues =[city, location.formatted_query, location.latitude, location.longitude]
+                    console.log(safeValues)
+        
+                    client.query(sql, safeValues)
+                    response.status(200).send(location);
+                })
+                .catch((error) => {
+                    console.log('ERROR', error);
+                    response.status(500).send('this is broke AF');
+                })
+        }
+    })
+    .catch((error) => {
+        console.log('ERROR', error);
+        response.status(500).send('this WHOLE DAM THANG IS BROK');
+    })
 }
 
 function ConstructCity (city, geoData) {
@@ -58,8 +86,6 @@ function weatherHandler (request, response) {
 
     superagent.get(url)
         .then((val) => {
-            //to console.log the incoming API
-            // console.log(val.body)
             const weatherData = val.body.data.map(obj => {
                 return new ConstructWeather(obj)
             })
@@ -80,13 +106,11 @@ function ConstructWeather (weatherObject) {
 function trailHandler (request, response) {
     let lat = request.query.latitude;
     let lon = request.query.longitude;
-    // console.log(request.query);
     let key = process.env.TRAIL_API_KEY;
     const url = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=10&key=${key}`;
 
     superagent.get(url)
         .then((val => {
-            // console.log(val.body);
             const trailInformation = val.body.trails.map(obj => {
                 return new ConstructTrails(obj);
             })
@@ -120,14 +144,11 @@ function brokenHandler (request, response) {
 }
 
 //Force server to listen for requests
-function startServer() {
-    app.listen(PORT, () => {
-        console.log('Server is listening on port', PORT);
-    })
-}
-
 client.connect()
-    .then(startServer)
-    .catch(error => console.log(error));
-
+  .then(() => {
+    app.listen(PORT, ()=> {
+      console.log(`listening on ${PORT}`);
+    })
+  })
+  .catch(error => console.error(error));
 
