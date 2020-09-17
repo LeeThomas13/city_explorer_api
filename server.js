@@ -7,6 +7,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
+const pg = require('pg')
 
 //Application Setup
 const PORT = process.env.PORT || 3000;
@@ -118,7 +119,11 @@ function brokenHandler (request, response) {
 }
 
 //Force server to listen for requests
-app.listen(PORT, () => {
-    console.log(`listening on ${PORT}`);
-});
+client.connect()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log('Server is listening on port', PORT);
+        })
+    })
+    .catch(error => console.log(error))
 
