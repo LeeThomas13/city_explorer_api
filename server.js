@@ -12,6 +12,7 @@ const pg = require('pg')
 //Application Setup
 const PORT = process.env.PORT || 3000;
 const app = express();
+const client = new pg.Client(process.env.DATABASE_URL);
 app.use(cors());
 
 //Route Definitions
@@ -119,11 +120,14 @@ function brokenHandler (request, response) {
 }
 
 //Force server to listen for requests
-client.connect()
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log('Server is listening on port', PORT);
-        })
+function startServer() {
+    app.listen(PORT, () => {
+        console.log('Server is listening on port', PORT);
     })
-    .catch(error => console.log(error))
+}
+
+client.connect()
+    .then(startServer)
+    .catch(error => console.log(error));
+
 
