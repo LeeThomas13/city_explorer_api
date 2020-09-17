@@ -39,6 +39,7 @@ Version 2.1.0 - finished refactoring old code, and get a map of whichever unique
 Version 2.2.0 - finished rendering weather forecast for selected city.
 Version 2.3.0 - finished rendering nearby trails.
 Version 3.0.0 - start of lab 09, feature 1 (database)
+Version 3.0.1 - Cant get psql to communicate with my server.js
 
 # Lab 06
 
@@ -132,7 +133,7 @@ Estimate of time needed to complete: 2 hours
 
 Start time: 7:00
 
-Finish time: 
+Finish time: tbd
 
 Actual time needed to complete: 
 
