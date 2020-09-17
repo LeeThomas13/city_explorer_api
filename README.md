@@ -38,6 +38,10 @@ Version 2.0.1 - cleaned up server.js now ready for refactor
 Version 2.1.0 - finished refactoring old code, and get a map of whichever unique city was requested rendering.
 Version 2.2.0 - finished rendering weather forecast for selected city.
 Version 2.3.0 - finished rendering nearby trails.
+Version 3.0.0 - start of lab 09, feature 1 (database)
+Version 3.0.1 - Cant get psql to communicate with my server.js
+Version 3.0.2 - fixed terminal bug
+Version 3.1.0 - finished saving locations into database
 
 # Lab 06
 
@@ -122,5 +126,37 @@ Start time: 6:40
 Finish time: 7:10
 
 Actual time needed to complete: 30 minutes
--->
 
+#Lab 08 
+
+Number and name of feature: #9 Database
+
+Estimate of time needed to complete: 2 hours
+
+Start time: 7:00
+
+Finish time: tbd
+
+Actual time needed to complete: 
+
+#Lab 09
+
+Number and name of feature: #9 Location Database
+
+Estimate of time needed to complete: 1 hours
+
+Start time: 2:30
+
+Finish time: 3:10
+
+Actual time needed to complete: 40min
+
+Number and name of feature: #10 Weather Database
+
+Estimate of time needed to complete: 2 hours
+
+Start time: 
+
+Finish time: 
+
+Actual time needed to complete: 
