@@ -156,7 +156,7 @@ Number and name of feature: #10 Weather Database
 
 Estimate of time needed to complete: 2 hours
 
-Start time: 3:30
+Start time: 3:30pm - 10pm ;nextday; 12:30
 
 Finish time: 
 
