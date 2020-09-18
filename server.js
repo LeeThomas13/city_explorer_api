@@ -8,8 +8,6 @@ const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
 const pg = require('pg');
-const { restart } = require('nodemon');
-const { response } = require('express');
 
 //Application Setup
 const PORT = process.env.PORT || 3001;
@@ -77,64 +75,80 @@ function ConstructCity (city, geoData) {
 
 //Weather Functions
 function weatherHandler (request, response) {
-    const incomingCity = request.query.city;
+    let {search_query, formatted_query, latitude, longitude} = request.query;
     const sql = `SELECT * FROM weather WHERE search_query=$1;`
-    const safeValues = [incomingCity]
+    const safeValues = [search_query]
 
     client.query(sql, safeValues)
         .then (resultsFromSql => {
-            if (resultsFromSql.rowCount) {
-                console.log('found location in weather database')
-                const chosenCity = resultsFromSql.rowCount[0];
-                response.status(200).send(chosenCity);
-            } else {
-                console.log('did not find location in weather database, sending to api, and creating new datababy');
-                const url = `https://api.weatherbit.io/v2.0/forecast/daily`
-                const queryObject = {
-                   key :  process.env.WEATHER_API_KEY,
-                   city : incomingCity,
-                   lat : request.query.latitude,
-                   lon : request.query.longitude,
-                   days: 8
-                }
-                superagent.get(url).query(queryObject)
+            if (resultsFromSql.rowCount){
+                let freshTime = Date.parse(new Date().toLocaleDateString()) - Date.parse(date.rows[0].date_entered) < 864;
+                if (freshTime) {
+                    console.log('this is out data.rows[0]', data.rows);
+                    console.log('weather in the DB and is fresh');
+                    response.status(200).send(resultsFromSql.rows);
+                } else {
+                    console.log('we did not have data in the DB, OR we had outdated data.');
+                    let key = process.env.WEATHER_API_KEY
+                    const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${latitude}&lon=${longitude}&key=${key}`;
+                    superagent.get(url)
                     .then(resultsFromApi => {
-                        let weatherData = resultsFromApi.body.data.map((obj, incomingCity) => {
-                            return new ConstructWeather(obj, incomingCity);
+                        var update = resultsFromApi.body.data;
+                        console.log(allWeather);
+                        let allWeather = update.map(weather => {
+                            console.log(weather);
+                            let newWeather = new ConstructWeather(weather);
+                            let sql = `INSERT INTO weather (search_query, forecast, time, date_entered) VALUES ($1, $2, $3, $4);`;
+                            let safeValues = [search_query, forecast, time, date_entered];
+                            client.query(sql, safeValues);
+                            return newWeather;
                         })
-                        console.log(weatherData);
-                        addWeather(weatherData)
+                        response.send(allWeather);
                     })
                     .catch((error) => {
                         console.log('something got f\'ed in the weather API', error);
                         response.status(500).send(error);
                     })
+                } 
+            } else {
+                console.log('we did not have data in the DB, OR we had outdated data.');
+                const url = `https://api.weatherbit.io/v2.0/forecast/daily`;
+                const queryObject = {
+                    key :  process.env.WEATHER_API_KEY,
+                    lat : request.query.latitude,
+                    lon : request.query.longitude,
+                    days: 8
+                }
+
+                superagent.get(url).query(queryObject)
+                .then(resultsFromApi => {
+                    var update = resultsFromApi.body.data;
+                    console.log(update)
+                    let allWeather = update.map(weather => {
+                        console.log(weather);
+                        let newWeather = new ConstructWeather(weather);
+                        let sql = `INSERT INTO weather (search_query, forecast, time, date_entered) VALUES ($1, $2, $3, $4);`;
+                        let safeValues = [search_query, forecast, time, date_entered];
+                        client.query(sql, safeValues);
+                        return newWeather;
+                    })
+                    response.send(allWeather);
+                })
+                .catch((error) => {
+                    console.log('something got f\'ed in the weather API', error);
+                    response.status(500).send(error);
+                })
             }
-            const chosenCity = resultsFromSql.rowCount[0];
-            response.status(200).send(chosenCity);
-        })
+            })
         .catch((error) => {
             console.log('ERROR', error);
-            response.status(500).send('this is broke AF');
+            response.status(500).send('this WHOEL weather thing is broke AF');
         })
 }
 
-function addWeather(obj) {
-    console.log(obj);
-    obj.forEach((day) => {
-        let sql = 'INSERT INTO weather (search_query, time, forecast) VALUES ($1 $2 $3);';
-        let safeValues = [day.search_query, day.time, day.forecast];
-
-        client.query(sql, safeValues)
-            .then((data) => console.log(`${data} was stored`));
-    })
-}
-
-function ConstructWeather (obj, incomingCity) {
-    console.log(obj, incomingCity);
-    this.search_query = incomingCity.city;
+function ConstructWeather (obj) {
     this.forecast = obj.weather.description;
-    this.time = obj.datetime;
+    this.time = obj.valid_date;
 }
 
 //Trail Functions
