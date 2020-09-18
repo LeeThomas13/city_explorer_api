@@ -42,6 +42,7 @@ Version 3.0.0 - start of lab 09, feature 1 (database)
 Version 3.0.1 - Cant get psql to communicate with my server.js
 Version 3.0.2 - fixed terminal bug
 Version 3.1.0 - finished saving locations into database
+Version 3.1.1 - couldnt figure out how to get weather into the database.
 
 # Lab 06
 
@@ -155,7 +156,7 @@ Number and name of feature: #10 Weather Database
 
 Estimate of time needed to complete: 2 hours
 
-Start time: 
+Start time: 3:30
 
 Finish time: 
 
