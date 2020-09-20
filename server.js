@@ -82,7 +82,7 @@ function weatherHandler (request, response) {
     client.query(sql, safeValues)
         .then (resultsFromSql => {
             if (resultsFromSql.rowCount){
-                let freshTime = Date.parse(new Date().toLocaleDateString()) - Date.parse(date.rows[0].date_entered) < 864;
+                let freshTime = Date.parse(new Date().toLocaleDateString()) - Date.parse(resultsFromSql.rows[0].date_entered) < 864;
                 if (freshTime) {
                     console.log('this is out data.rows[0]', data.rows);
                     console.log('weather in the DB and is fresh');
@@ -90,16 +90,14 @@ function weatherHandler (request, response) {
                 } else {
                     console.log('we did not have data in the DB, OR we had outdated data.');
                     let key = process.env.WEATHER_API_KEY
-                    const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${latitude}&lon=${longitude}&key=${key}`;
+                    const url = `https://api.weatherbit.io/v2.0/daily?lat=${latitude}&lon=${longitude}&key=${key}`;
                     superagent.get(url)
                     .then(resultsFromApi => {
                         var update = resultsFromApi.body.data;
-                        console.log(allWeather);
                         let allWeather = update.map(weather => {
-                            console.log(weather);
                             let newWeather = new ConstructWeather(weather);
                             let sql = `INSERT INTO weather (search_query, forecast, time, date_entered) VALUES ($1, $2, $3, $4);`;
-                            let safeValues = [search_query, forecast, time, date_entered];
+                            let safeValues = [search_query, newWeather.forecast, newWeather.time, newWeather.date_entered];
                             client.query(sql, safeValues);
                             return newWeather;
                         })
@@ -123,12 +121,10 @@ function weatherHandler (request, response) {
                 superagent.get(url).query(queryObject)
                 .then(resultsFromApi => {
                     var update = resultsFromApi.body.data;
-                    console.log(update)
                     let allWeather = update.map(weather => {
-                        console.log(weather);
                         let newWeather = new ConstructWeather(weather);
                         let sql = `INSERT INTO weather (search_query, forecast, time, date_entered) VALUES ($1, $2, $3, $4);`;
-                        let safeValues = [search_query, forecast, time, date_entered];
+                        let safeValues = [search_query, newWeather.forecast, newWeather.time, newWeather.date_entered];
                         client.query(sql, safeValues);
                         return newWeather;
                     })
